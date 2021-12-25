@@ -11,7 +11,7 @@ PAPAID = os.environ['PAPAID']
 sarahTOKEN = os.environ['SARAH_TOKEN']
 
 this_path = os.path.dirname(os.path.abspath(__file__))
-sarah_log_file = os.path.join(this_path, '-sarah', 'sarah.log')
+sarah_log_file = os.path.join(this_path, 'logs', 'sarah.log')
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler = RotatingFileHandler(sarah_log_file, maxBytes=4194304, backupCount=3)
 handler.setFormatter(formatter)
@@ -19,7 +19,7 @@ sarah_logger = logging.getLogger('Sarah')
 sarah_logger.setLevel(logging.DEBUG)
 sarah_logger.addHandler(handler)
 
-sarah_stat_file_name = os.path.join(this_path, 'logs', 'sarah.stat')
+sarah_stat_file_name = os.path.join(this_path, 'stat', 'sarah.stat')
 
 @route('/setSarahWebhook')
 def setSarahWebhook():
