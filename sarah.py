@@ -21,6 +21,9 @@ sarah_logger.addHandler(handler)
 
 sarah_stat_file_name = os.path.join(this_path, 'stat', 'sarah.stat')
 
+sarah_logger.info('Start logging into {}'.format(sarah_log_file))
+sarah_logger.info('Env vars: PAPAID={}, SARAH_TOKEN={}'.format(PAPAID, sarahTOKEN))
+
 @route('/setSarahWebhook')
 def setSarahWebhook():
     bot = telegram.Bot(sarahTOKEN)
@@ -33,7 +36,7 @@ def botSarahHook():
     bot = telegram.Bot(sarahTOKEN)
     update = telegram.update.Update.de_json(request.json, bot)
     if update.message is not None:
-        sarah_logger.info('MSG2SARAH. %s', update.message.text);
+        sarah_logger.info('MSG2SARAH. %s', update.message.text)
     return 'OK'
 
 def to_stat(stat):
@@ -59,8 +62,10 @@ def m2p():
 application = default_app()
 
 if os.environ.get('APP_LOCATION') == 'OCI':
+    sarah_logger.info('Running on OCI')
     print('Running on oracle cloud')
     run(host="140.238.175.120")
 else:
     run(host='localhost', port=8080, debug=True)
+    sarah_logger.info('Running locally')
     print('Running locally')
