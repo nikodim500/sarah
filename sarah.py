@@ -9,6 +9,7 @@ import json
 APPNAME = 'sarah'
 PAPAID = os.environ['PAPAID']
 sarahTOKEN = os.environ['SARAH_TOKEN']
+app_location = os.environ.get('APP_LOCATION')
 
 this_path = os.path.dirname(os.path.abspath(__file__))
 sarah_log_file = os.path.join(this_path, 'logs', 'sarah.log')
@@ -22,7 +23,7 @@ sarah_logger.addHandler(handler)
 sarah_stat_file_name = os.path.join(this_path, 'stat', 'sarah.stat')
 
 sarah_logger.info('Start logging into {}'.format(sarah_log_file))
-sarah_logger.info('Env vars: PAPAID={}, SARAH_TOKEN={}'.format(PAPAID, sarahTOKEN))
+sarah_logger.info('Env vars: PAPAID={}, SARAH_TOKEN={}, APP_LOCATION={}'.format(PAPAID, sarahTOKEN, app_location))
 
 @route('/setSarahWebhook')
 def setSarahWebhook():
@@ -61,7 +62,7 @@ def m2p():
 
 application = default_app()
 
-if os.environ.get('APP_LOCATION') == 'OCI':
+if app_location == 'OCI':
     sarah_logger.info('Running on OCI')
     print('Running on oracle cloud')
     run(host="140.238.175.120")
