@@ -7,8 +7,8 @@ import telegram
 import json
 
 APPNAME = 'sarah'
-PAPAID = 97835760
-sarahTOKEN = '276390507:AAHBg2AmrnJXLtCXoDYW6ipo1ufjaKJAG0c'
+PAPAID = os.environ['PAPAID']
+sarahTOKEN = os.environ['SARAH_TOKEN']
 
 this_path = os.path.dirname(os.path.abspath(__file__))
 sarah_log_file = os.path.join(this_path, '-sarah', 'sarah.log')
