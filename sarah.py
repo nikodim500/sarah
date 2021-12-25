@@ -19,7 +19,7 @@ sarah_logger = logging.getLogger('Sarah')
 sarah_logger.setLevel(logging.DEBUG)
 sarah_logger.addHandler(handler)
 
-sarah_stat_file_name = os.path.join(this_path, '-sarah', 'sarah.stat')
+sarah_stat_file_name = os.path.join(this_path, 'logs', 'sarah.stat')
 
 @route('/setSarahWebhook')
 def setSarahWebhook():
