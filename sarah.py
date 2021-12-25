@@ -2,7 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 import sys
-from bottle import default_app, route, request
+from bottle import default_app, route, request, run
 import telegram
 import json
 
@@ -57,3 +57,10 @@ def m2p():
         bot.sendMessage(chat_id = PAPAID, text = '[' + postdata['typ'] + '] ' + postdata['src'] + ': ' + postdata['msg'])
 
 application = default_app()
+
+if os.environ.get('APP_LOCATION') == 'OCI':
+    print('Running on oracle cloud')
+    run(host="140.238.175.120")
+else:
+    run(host='localhost', port=8080, debug=True)
+    print('Running locally')
