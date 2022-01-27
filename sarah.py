@@ -78,10 +78,11 @@ def m2p():
 application = default_app()
 
 if app_location == 'OCI':
-    sarah_logger.info('Running on OCI')
+    port = 80
+    sarah_logger.info('Running on OCI. Port {}'.format(port))
     print('Running on oracle cloud')
-    run(host="0.0.0.0")
+    run(host="0.0.0.0", port=port)
 else:
     run(host='localhost', port=8080, debug=True)
-    sarah_logger.info('Running locally')
+    sarah_logger.info('Running locally on port {}'.format(8080))
     print('Running locally')
