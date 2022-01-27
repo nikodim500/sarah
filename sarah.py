@@ -2,9 +2,10 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 import sys
-from bottle import default_app, route, request, run
+from bottle import default_app, route, request, run, view, static_file
 import telegram
 import json
+import datetime as dt
 
 APPNAME = 'sarah'
 PAPAID = os.environ['PAPAID']
@@ -24,6 +25,20 @@ sarah_stat_file_name = os.path.join(this_path, 'stat', 'sarah.stat')
 
 sarah_logger.info('Start logging into {}'.format(sarah_log_file))
 sarah_logger.info('Env vars: PAPAID={}, SARAH_TOKEN={}, APP_LOCATION={}'.format(PAPAID, sarahTOKEN, app_location))
+
+@route('/')
+@route('/home')
+@view('home')
+def home():
+    """Renders the home page."""
+    return dict(
+        year=dt.date.today().year
+    )
+
+@route('/log')
+def log():
+    return static_file(sarah_log_file)
+
 
 @route('/setSarahWebhook')
 def setSarahWebhook():
