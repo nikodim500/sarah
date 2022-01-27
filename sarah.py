@@ -83,6 +83,7 @@ if app_location == 'OCI':
     print('Running on oracle cloud')
     run(host="0.0.0.0", port=port)
 else:
-    run(host='localhost', port=8080, debug=True)
-    sarah_logger.info('Running locally on port {}'.format(8080))
+    port = 8080
+    run(host='localhost', port=port, debug=True)
+    sarah_logger.info('Running locally on port {}'.format(port))
     print('Running locally')
