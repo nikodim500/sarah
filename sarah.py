@@ -69,7 +69,7 @@ def to_stat(stat):
         sarah_logger.info("Save to stat file error: %s", sys.exc_info()[0]);
 
 
-@app.route('/m2p', method=['POST', 'GET'])  # {"typ": "INFO","src": "Gates","msg": "Openning..."}
+@app.route('/m2p')  # {"typ": "INFO","src": "Gates","msg": "Openning..."}
 def m2p():
     postdata = request.body.read()
     postdata = postdata.decode('utf-8')
