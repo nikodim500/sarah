@@ -28,25 +28,27 @@ sarah_logger.info('Env vars: PAPAID={}, SARAH_TOKEN={}, APP_LOCATION={}'.format(
 
 app = Flask(__name__)
 
+
 @app.route('/')
 @app.route('/home')
-@app.view('home')
 def home():
     """Renders the home page."""
     return dict(
         year=dt.date.today().year
     )
 
-#@app.route('/log')
-#def log():
+
+# @app.route('/log')
+# def log():
 #    return static_file(sarah_log_file)
 
 
 @app.route('/setSarahWebhook')
 def setSarahWebhook():
     bot = telegram.Bot(sarahTOKEN)
-    botWebhookResult = bot.setWebhook(webhook_url='https://{}.pythonanywhere.com/botSarahHook'.format(APPNAME))
+    botWebhookResult = bot.setWebhook(webhook_url='https://140.238.175.120//botSarahHook')
     return str(botWebhookResult)
+
 
 @app.route('/botSarahHook', method='POST')
 def botSarahHook():
@@ -57,6 +59,7 @@ def botSarahHook():
         sarah_logger.info('MSG2SARAH. %s', update.message.text)
     return 'OK'
 
+
 def to_stat(stat):
     try:
         f = open(sarah_stat_file_name, 'a')
@@ -65,7 +68,8 @@ def to_stat(stat):
     except Exception:
         sarah_logger.info("Save to stat file error: %s", sys.exc_info()[0]);
 
-@app.route('/m2p', method = ['POST', 'GET'])   # {"typ": "INFO","src": "Gates","msg": "Openning..."}
+
+@app.route('/m2p', method=['POST', 'GET'])  # {"typ": "INFO","src": "Gates","msg": "Openning..."}
 def m2p():
     postdata = request.body.read()
     postdata = postdata.decode('utf-8')
@@ -75,7 +79,7 @@ def m2p():
         to_stat(postdata['src'] + ' ' + postdata['msg'])
     else:
         bot = telegram.Bot(sarahTOKEN)
-        bot.sendMessage(chat_id = PAPAID, text = '[' + postdata['typ'] + '] ' + postdata['src'] + ': ' + postdata['msg'])
+        bot.sendMessage(chat_id=PAPAID, text='[' + postdata['typ'] + '] ' + postdata['src'] + ': ' + postdata['msg'])
 
 
 if app_location == 'OCI':
