@@ -1,8 +1,8 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+from flask import Flask, request
 import sys
-from bottle import default_app, route, request, run, view, static_file
 import telegram
 import json
 import datetime as dt
@@ -26,27 +26,29 @@ sarah_stat_file_name = os.path.join(this_path, 'stat', 'sarah.stat')
 sarah_logger.info('Start logging into {}'.format(sarah_log_file))
 sarah_logger.info('Env vars: PAPAID={}, SARAH_TOKEN={}, APP_LOCATION={}'.format(PAPAID, sarahTOKEN, app_location))
 
-@route('/')
-@route('/home')
-@view('home')
+app = Flask(__name__)
+
+@app.route('/')
+@app.route('/home')
+@app.view('home')
 def home():
     """Renders the home page."""
     return dict(
         year=dt.date.today().year
     )
 
-@route('/log')
-def log():
-    return static_file(sarah_log_file)
+#@app.route('/log')
+#def log():
+#    return static_file(sarah_log_file)
 
 
-@route('/setSarahWebhook')
+@app.route('/setSarahWebhook')
 def setSarahWebhook():
     bot = telegram.Bot(sarahTOKEN)
     botWebhookResult = bot.setWebhook(webhook_url='https://{}.pythonanywhere.com/botSarahHook'.format(APPNAME))
     return str(botWebhookResult)
 
-@route('/botSarahHook', method='POST')
+@app.route('/botSarahHook', method='POST')
 def botSarahHook():
     sarah_logger.info('SARAH hook')
     bot = telegram.Bot(sarahTOKEN)
@@ -63,7 +65,7 @@ def to_stat(stat):
     except Exception:
         sarah_logger.info("Save to stat file error: %s", sys.exc_info()[0]);
 
-@route('/m2p', method = ['POST', 'GET'])   # {"typ": "INFO","src": "Gates","msg": "Openning..."}
+@app.route('/m2p', method = ['POST', 'GET'])   # {"typ": "INFO","src": "Gates","msg": "Openning..."}
 def m2p():
     postdata = request.body.read()
     postdata = postdata.decode('utf-8')
@@ -75,15 +77,14 @@ def m2p():
         bot = telegram.Bot(sarahTOKEN)
         bot.sendMessage(chat_id = PAPAID, text = '[' + postdata['typ'] + '] ' + postdata['src'] + ': ' + postdata['msg'])
 
-application = default_app()
 
 if app_location == 'OCI':
     port = 8080
     sarah_logger.info('Running on OCI. Port {}'.format(port))
     print('Running on oracle cloud')
-    run(host="140.238.175.120", port=port)
+    app.run(host="140.238.175.120", port=port)
 else:
     port = 8080
-    run(host='localhost', port=port, debug=True)
+    app.run(host='localhost', port=port, debug=True)
     sarah_logger.info('Running locally on port {}'.format(port))
     print('Running locally')
